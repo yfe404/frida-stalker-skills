@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frida Stalker (Android)"
+  short_description: "Android native tracing with Frida Stalker"
+  default_prompt: "Use $frida-stalker-android to trace a target thread/module on Android using Frida Stalker."
