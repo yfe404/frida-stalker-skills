@@ -1,28 +1,26 @@
-# Frida Stalker (Android) skill
+# Frida Stalker (Android) templates
 
 Frida 17+ Stalker templates and workflow for Android (ARM/ARM64): call summaries, event parsing, transforms, module filtering, and safe start/stop patterns.
 
 ## What's in here
 
-- `SKILL.md`: Codex skill definition and workflow (this is what Codex loads)
+- `SKILL.md`: metadata + workflow notes (used by skill loaders, but also readable as plain docs)
 - `templates/`: ready-to-run Frida scripts
 - `references/`: compact notes to keep scripts consistent with Frida 17+ APIs
 
-## Install as a Codex skill
+## Quick start (Frida CLI)
 
-Option A (symlink):
-
-```sh
-ln -s ~/Documents/frida-stalker-android ~/.codex/skills/frida-stalker-android
-```
-
-Option B (clone directly into skills dir):
+1. Pick the best default template: `templates/stalker-start-stop-around-hook.js`
+2. Edit `TARGET_MODULE` + `TARGET_EXPORT` inside the template.
+3. Run it:
 
 ```sh
-git clone git@github.com:yfe404/frida-stalker-skills.git ~/.codex/skills/frida-stalker-android
+frida -U -f com.example.app -l templates/stalker-start-stop-around-hook.js --no-pause
 ```
 
-## Templates
+That template starts stalking only while your target function runs, using `Process.getCurrentThreadId()` inside the hook so you don’t have to guess thread IDs.
+
+## Tips
 
 - `templates/stalker-start-stop-around-hook.js`: start stalking only during a hooked function call (good default)
 - `templates/stalker-call-summary.js`: low overhead call counting (`onCallSummary`)
@@ -36,4 +34,3 @@ git clone git@github.com:yfe404/frida-stalker-skills.git ~/.codex/skills/frida-s
 - Avoid `events.exec` unless you really need it; it is extremely high volume.
 - Prefer `onCallSummary` when ordering is not needed.
 - Always `unfollow` + `flush` + `garbageCollect` when repeatedly starting/stopping.
-
